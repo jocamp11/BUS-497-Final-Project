@@ -10,8 +10,13 @@ View(ERIMData)
 length(which(is.na(ERIMData))) # 4
 which(is.na(ERIMData)) # 3676 10663 12081 14658
 
+# summary of ERIMData
+summary(ERIMData)
+
 # Remove NAs from the Dataset
 Omission_Data = na.omit(ERIMData)
+
+# Note using ERIMDATA, not Ommission_Data
 
 # Subseting Residence Status & Education Level (Male & Female) 
 myData1 = ERIMData[,c("ResStatus","MEdu")]
@@ -59,6 +64,43 @@ summary(ERIMData$FWrkHrs) # Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
 # Based on observation: On average, males work more than females. 
 # Males working on avg of 26.34 hrs compared to females where they work 22.11 hours.
 
+# Creating linear regresion models
+
+# What is the average HHInc (in a quantitative aspect)
+# Household Income ~ Male Education Level + Male Working Hours
+model1 <- lm(HHInc ~ MEdu + MWrkHrs, data = ERIMData)
+summary(model1)
+options(scipen = 999)
+
+# Male education of college degree and works 50 hrs
+test = 3.441818 + (0.299144* 9) + (0.036294 * 50) # 7.948814
+
+# Household Income ~ Female Education Level + Female Working Hours
+model2 <- lm(HHInc ~ FEdu + FWrkHrs, data = ERIMData)
+summary(model2)
+
+# Female education of a graduate college degree and works 50 hrs
+test2 = 3.163006 + (0.348224*11) + (0.023917*50) # 8.18932
+
+# Residence Status  ~ Male Education Level + Male Working Hours + Frozen Dinner Expense
+model3 <- lm(ResStatus ~ MEdu + MWrkHrs + DinExp, data = ERIMData)
+summary(model3)
+
+# Residence Status  ~ Male Education Level + Male Working Hours + Female Education Level + Female Working Hours
+model4 <- lm(ResStatus ~ MEdu + MWrkHrs + FEdu + FWrkHrs, data = ERIMData)
+summary(model4)
+
+# Residence Status  ~ Male Education Level + Male Working Hours + Female Education Level + Female Working Hours + Members in Household
+model5 <- lm(ResStatus ~ MEdu + MWrkHrs + FEdu + FWrkHrs + HHNbr, data = ERIMData)
+summary(model5)
+
+# Male working hours ~ Male education level
+model6 <- lm(MWrkHrs ~ MEdu, data = ERIMData)
+summary(model6)
+
+
+#plot(ERIMData$MEdu ~ ERIMData$MWrkHrs, data = ERIMData, ylab = 'Education', 
+#     xlab = 'Avg Working Hrs')
 
 
 
